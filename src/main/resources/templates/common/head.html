@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head th:fragment="common-head">
+    <!-- 页面注释 正式发版一定删除 -->
+    <!-- 头部 meta 标签浏览器兼容写法，必写不能少 -->
+    <meta charset="UTF-8" name="decorator" content="default">
+    <meta name="referrer" content="always">
+    <meta name="renderer" content="webkit">
+    <meta name="force-rendering" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="format-detection" content="telphone=no"/>
+    <meta content="email=no" name="format-detection"/>
+    <meta name="viewport" content="width=device-width, initial-scale=0.7, user-scalable=no">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="Cache" content="no-cache">
+    <link rel="icon" href="${ctxStatic}/images/favicon.ico" type="image/x-icon">
+    <!--[if lt IE 9]>
+    <script type="text/javascript">alert('您当前浏览器版本过低，请更换较新浏览器，以免影响您正常浏览网站!')</script>
+    <![endif]-->
+    <!-- 以上meta标签请勿删除 end -->
+
+    <!--引入jquery插件-->
+    <script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+
+    <!--引入公共css-->
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <link rel="stylesheet" th:href="@{/css/house.css}">
+    <link rel="stylesheet" th:href="@{/css/imgbox.css}">
+    <link rel="stylesheet" th:href="@{/css/mobile-style.css}">
+
+    <!-- ztree -->
+    <link rel="stylesheet" th:href="@{/css/metroStyle/metroStyle.css}">
+    <!-- 日历控件 -->
+    <link rel="stylesheet" th:href="@{/css/calendar.css}">
+    <link rel="stylesheet" th:href="@{/css/swiper.min.css}">
+    <!-- css,end -->
+
+    <!-- 判断手机端浏览器 -->
+    <script type="text/javascript" th:src="@{/js/common.js}"></script>
+
+    <script type="text/javascript" th:src="@{/js/dymy.js}"></script>
+    <!-- 弹框提示插件 -->
+    <script type="text/javascript" th:src="@{/js/js_Dialog.js}"></script>
+    <!-- 引入必要插件 -->
+    <!-- ztree  excheck单选-->
+    <script type="text/javascript" th:src="@{/js/jquery.ztree.core.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/jquery.ztree.excheck.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/jquery.ztree.exhide-3.5.min.js}"></script>
+
+    <!-- layDate 日历控件 -->
+    <script type="text/javascript" th:src="@{/js/laydate/laydate.js}"></script>
+
+    <!-- echarts  -->
+    <script type="text/javascript" th:src="@{/js/echarts.min.js}"></script>
+    <!-- 首页js 调用echarts ztree 弹层 -->
+    <script type="text/javascript" th:src="@{/js/index.js}"></script>
+    <script type="text/javascript" th:src="@{/js/swiper.js}"></script>
+    <!-- 引入layer插件 -->
+    <script type="text/javascript" th:src="@{/layer-v2.0/layer/layer.js}"></script>
+
+    <!-- 引入消息提示 -->
+    <script type="text/javascript" th:src="@{/jquery/jquery-validation/1.14.0/jquery.validate.js}"></script>
+    <script type="text/javascript" th:src="@{/jquery/jquery-validation/1.14.0/localization/messages_zh.min.js}"></script>
+    <!-- js,end -->
+
+    <script type="text/javascript">var ctx = '${ctx}', ctxStatic='${ctxStatic}';</script>
+
+</head>
+</html>

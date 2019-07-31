@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.origin.modules.system.dao.MenuMapper">
+
+    <resultMap id="menu" type="com.origin.modules.system.entity.Menu">
+        <id column="menu_id" property="menuId" />
+        <result column="parent_id" property="parentId" />
+        <result column="menu_name" property="menuName" />
+        <result column="url" property="url" />
+        <result column="perms" property="perms" />
+        <result column="icon" property="icon" />
+        <result column="type" property="type" />
+        <result column="sort" property="sort" />
+        <result column="create_by" property="createBy" />
+        <result column="create_time" property="createTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="del_flag" property="delFlag" />
+    </resultMap>
+
+    <!-- 查询用户对应的菜单权限-->
+    <select id="findUserPermissions" resultMap="menu">
+        SELECT u.*
+        FROM sys_user u
+        LEFT JOIN ON sys_user_role ur ON ur.user_id = u.user_id
+        LEFT JOIN ON sys_role r ON r.role_id = ur.role_id
+        LEFT JOIN ON sys_role_menu rm ON rm.role_id = r.role_id
+        LEFT JOIN ON sys_menu m ON m.menu_id = rm.menu_id
+        WHERE u.user_id = #{userId}
+        AND m.perms is not null and m.perms != ''
+  </select>
+</mapper>
