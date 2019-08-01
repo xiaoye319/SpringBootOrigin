@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Component("shiroRealm")
+@Component
 public class ShiroRealm extends AuthorizingRealm{
 
     @Autowired

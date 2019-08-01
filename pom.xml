@@ -98,6 +98,13 @@
             <artifactId>fastjson</artifactId>
             <version>1.2.31</version>
         </dependency>
+
+        <!-- xss过滤 -->
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.9.2</version>
+        </dependency>
     </dependencies>
 
     <build>

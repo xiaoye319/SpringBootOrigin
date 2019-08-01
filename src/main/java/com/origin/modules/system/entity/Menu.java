@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.origin.common.base.BaseEntity;
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * @Description: 菜单实体类
  * @Author: yelei
@@ -12,7 +14,7 @@ import lombok.Data;
 
 @Data
 @TableName("sys_menu")
-public class Menu extends BaseEntity {
+public class Menu extends BaseEntity implements Serializable{
 
     private static final long serialVersionUID = 1L;
 
@@ -55,4 +57,9 @@ public class Menu extends BaseEntity {
      * 排序
      */
     private Long sort;
+
+    /**
+     * 删除标识（0：正常；1：逻辑删除）
+     */
+    private int delFlag;
 }

@@ -1,0 +1,98 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<!--此处引入公共的模板页面即可，不用在每个页面引入js和css-->
+<head th:replace="common/head">
+    <title>登录</title>
+</head>
+<body>
+<div class="page-loading"></div>
+<div class="nav-head clear">
+    <a href="#" onclick="openUser()">
+        你好<span class="user-name" th:text="${user.userName}"></span>
+    </a>
+    <span class="week">星期</span>
+    <span class="nowtime">时间</span>
+    <span class="login-out" onclick="logOutUser()">退出</span>
+</div>
+<div class="side-menu">
+    <div class="nav-top"><img class="logo" th:src="@{/images/menu-logo.jpg}" alt=""></div>
+    <ul class="nav" id="side-menu">
+        <!-- 左侧菜单 循环输出 -->
+        <!-- 登录成功后 首页是选中的状态：添加active -->
+        <!-- 左侧菜单开始 -->
+        <li class="menu-item active ">
+            <a id="home" th:href="@{/sys/home/index}" onclick="formPage(this)"><i class="icons icon-home"></i><span>首页</span></a>
+        </li>
+        <li th:each="menu : ${menus}" th:class="menu-item">
+            <a th:href="@{${menu.url}}"><i th:class="${menu.icon}"></i><span class="items" th:text="${menu.menuName}"></span></a>
+        </li>
+        <!-- 左侧菜单，end -->
+    </ul>
+</div>
+<!-- 根据左侧生成链接地址同步到右侧 iframe中 -->
+<div class="main">
+    <iframe class="content" onload="addload()" id="content" name="houtai"></iframe>
+</div>
+<div class="banner flexslider" id="gallery">
+    <div class="close-btn" onclick="closeGallery()"></div>
+    <div class="swiper-container">
+        <div class="swiper-wrapper"></div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+    </div>
+</div>
+</body>
+<style>
+    .layui-layer-content{max-height:80% !important; overflow: scroll !important;    -webkit-overflow-scrolling: touch;}
+    .layui-layer-content iframe{overflow: scroll !important;}
+    .layui-layer-content{font-size:1.15rem}
+</style>
+<script type="text/javascript" th:src="@{/js/main.js}"></script>
+<!--<script id="guide_mg" data-id="${fns:getUser().isGuide}" data-url="${ctx}/sys/user/checkIsGuide" type="text/javascript" src="${ctxStatic }/js/guide_mg.js"></script>-->
+<script type="text/javascript">
+
+    function formPage(obj){
+        $(".page-loading").show();
+        var psrc = $(obj).attr("href");
+        if (psrc != "javascript:;") {
+            $(".page-loading").show();
+            $("#content").attr("src",psrc);
+        }else{
+            $(".page-loading").hide();
+        }
+    }
+    //页面加载选中首页
+    $(function(){
+        $(".page-loading").show();
+        var phref = $("#home").attr("href");
+        $("#content").attr("src",phref);
+        var sto_userId = '${fns:getUser().id}';
+        localStorage.setItem('sto_pc_userId',sto_userId);
+    })
+
+    function addload(){
+        $(".page-loading").hide();
+    }
+    $(function(){
+        var date = new Date();
+        $('.week').html("周"+"日一二三四五六".charAt(date.getDay()));
+        date.getHours() > 12 ? $('.nowtime').html('下午'+addPreZero(date.getHours())+":"+addPreZero(date.getMinutes())) : $('.nowtime').html('上午'+addPreZero(date.getHours())+":"+addPreZero(date.getMinutes()));
+    })
+    function addPreZero(num){
+        if (num < 10) {
+            return '0'+ num
+        }else{
+            return num
+        }
+    }
+    function openUser(){
+        $(".page-loading").show();
+        $("#content").attr("src","${ctx }/sys/user/currentUser");
+    }
+    function logOutUser(){
+        $.JsDialog.Confirm("提示", "确认退出登录？", function () {
+            window.parent.location.href = "/logout"
+        })
+    }
+</script>
+
+</html>

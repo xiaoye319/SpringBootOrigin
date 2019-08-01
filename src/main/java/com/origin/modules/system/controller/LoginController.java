@@ -1,12 +1,15 @@
 package com.origin.modules.system.controller;
 
 import com.origin.common.base.BaseController;
+import com.origin.common.utils.UserUtils;
 import com.origin.modules.system.entity.Menu;
+import com.origin.modules.system.entity.User;
 import com.origin.modules.system.service.MenuService;
-import com.origin.modules.system.service.UserService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.subject.Subject;
+import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
+import org.apache.shiro.web.util.WebUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +17,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * @Description: 登录Controller
@@ -30,8 +32,6 @@ public class LoginController extends BaseController {
 
     private Logger log = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired
-    private UserService userService;
     @Autowired
     private MenuService menuService;
 
@@ -47,7 +47,7 @@ public class LoginController extends BaseController {
      * 登录认证
      */
     @PostMapping("/login")
-    public String login(String username, String password, String code, Boolean rememberMe, Model model, HttpServletRequest request) {
+    public String login(String userName, String password, String code, Boolean rememberMe, Model model, HttpServletRequest request) {
 //        if (!StringUtils.isNotBlank(code)) {
 //            return ResponseBo.warn("验证码不能为空！");
 //        }
@@ -58,18 +58,14 @@ public class LoginController extends BaseController {
 //        }
         // 密码 MD5 加密
 //        password = MD5Utils.encrypt(username.toLowerCase(), password);
-        UsernamePasswordToken token = new UsernamePasswordToken(username, password, rememberMe);
+        rememberMe = WebUtils.isTrue(request, FormAuthenticationFilter.DEFAULT_REMEMBER_ME_PARAM);
+        UsernamePasswordToken token = new UsernamePasswordToken(userName, password, rememberMe);
         try {
-//            Subject subject = SecurityUtils.getSubject();
-//            if (subject != null){
-//                subject.logout();
-//            }
-//            subject.login(token);
-//            userService.updateLoginTime(username);
-//
-//            // 获取用户权限集
-//            List<Menu> permissionList = menuService.findUserPermissions(userId);
-//            model.addAttribute("permissionList",permissionList);
+            Subject subject = SecurityUtils.getSubject();
+            if (subject != null){
+                subject.logout();
+            }
+            subject.login(token);
 
         } catch (UnknownAccountException | IncorrectCredentialsException | LockedAccountException e) {
             request.setAttribute("msg", "账户信息异常");
@@ -79,6 +75,43 @@ public class LoginController extends BaseController {
             return "login";
         }
         // 执行到这里说明用户已登录成功
+        return "redirect:/index";
+    }
+
+    /**
+     * 跳转登录页面
+     */
+    @RequestMapping("/index")
+    public String index(Model model) {
+        User user = UserUtils.getCurrentUser();
+        if (user != null) {
+            // 获取用户能访问的菜单
+            List<Menu> menus = menuService.findUserPermissions(user.getUserId());
+            model.addAttribute("menus",menus);
+            model.addAttribute("user", user);
+            return "index";
+        } else {
+            return "login";
+        }
+    }
+
+    /**
+     * 退出登录
+     */
+    @RequestMapping("/logout")
+    public String logout(Model model) {
+        Subject subject = SecurityUtils.getSubject();
+        if (subject != null){
+            subject.logout();
+        }
+        return "redirect:/login";
+    }
+
+    /**
+     * 空白页跳转
+     */
+    @RequestMapping("/")
+    public String common() {
         return "redirect:/index";
     }
 
@@ -104,28 +137,4 @@ public class LoginController extends BaseController {
 //            log.error("图形验证码生成失败", e);
 //        }
 //    }
-//
-//    @RequestMapping("/")
-//    public String redirectIndex() {
-//        return "redirect:/index";
-//    }
-//
-//    @GetMapping("/403")
-//    public String forbid() {
-//        return "403";
-//    }
-//
-//    @RequestMapping("/index")
-//    public String index(Model model) {
-//        // 登录成后，即可通过 Subject 获取登录的用户信息
-////        User user = super.getCurrentUser();
-////        model.addAttribute("user", user);
-//        return "index";
-//    }
-
-//    @GetMapping("/login")
-//    public String login() {
-//        return "login";
-//    }
-
 }

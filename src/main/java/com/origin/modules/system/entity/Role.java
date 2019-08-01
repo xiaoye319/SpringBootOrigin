@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.origin.common.base.BaseEntity;
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * @Description:  角色实体类
  * @Author: yelei
@@ -12,7 +14,7 @@ import lombok.Data;
 
 @Data
 @TableName("sys_role")
-public class Role extends BaseEntity {
+public class Role extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -30,4 +32,9 @@ public class Role extends BaseEntity {
      * 角色描述
      */
     private String remark;
+
+    /**
+     * 删除标识（0：正常；1：逻辑删除）
+     */
+    private int delFlag;
 }
